@@ -1,0 +1,32 @@
+services:
+  api_db:
+    image: postgres
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - '${DB_EXTERN}:${DB_PORT}'
+
+  api:
+    build: .
+    env_file:
+      - .env
+    depends_on:
+      - api_db
+    ports:
+      - '${PORT}:${PORT}'
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    volumes:
+      - ./rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
