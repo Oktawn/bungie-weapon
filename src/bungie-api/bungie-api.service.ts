@@ -11,17 +11,21 @@ export class BungieApiService {
     @InjectRepository(WeaponEntity) private weaponRepository: Repository<WeaponEntity>,
     private httpService: HttpService) { }
 
-
   async getWeapon(name: string) {
     try {
       const hasWeapon = await this.weaponRepository.findOne({ where: { name: name } });
-      if (!hasWeapon) throw new BadRequestException('Weapon not found');
-      const id = hasWeapon.id;
+      if (!hasWeapon) {
+        throw new BadRequestException('Weapon not found');
+      }
+      const id = hasWeapon.id;      
+      console.log(hasWeapon.icon)
       const res = await this.httpService.axiosRef.get(`/Destiny2/Manifest/DestinyInventoryItemDefinition/${id}`);
-      if (res.status !== 200) throw new BadRequestException('Weapon not found');
+      if (res.status !== 200) {
+        throw new BadRequestException('Weapon not found');
+      }
       return res.data.Response.stats.stats;
     } catch (error) {
-      throw new BadRequestException();
+      throw new BadRequestException(error.message);
     }
 
   }

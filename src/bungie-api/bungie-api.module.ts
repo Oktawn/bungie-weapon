@@ -5,6 +5,7 @@ import { HttpModule } from '@nestjs/axios';
 import { config } from 'dotenv';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WeaponEntity } from 'src/entity/weapons.entity';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 config();
 @Module({
   imports: [
@@ -14,7 +15,19 @@ config();
         'X-API-Key': process.env.API_KEY
       }
     }),
-    TypeOrmModule.forFeature([WeaponEntity])],
+    TypeOrmModule.forFeature([WeaponEntity]),
+    ClientsModule.register([{
+      name: 'BUNGIE_API',
+      transport: Transport.RMQ,
+      options: {
+        urls: [`${process.env.RABBITMQ_LOCAL_URL}`],
+        queue: 'bungie_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    }])
+  ],
   controllers: [BungieApiController],
   providers: [BungieApiService],
 })
