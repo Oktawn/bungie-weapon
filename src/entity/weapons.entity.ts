@@ -1,23 +1,17 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
-@Entity('weapon')
+@Entity('weapons')
 export class WeaponEntity {
 
   @PrimaryColumn()
   id: string
 
   @Column()
-  name: string
+  name: string;
 
   @Column()
-  type: string;
+  icon: string
 
   @Column()
-  description: string;
-
-  @Column()
-  image: string;
-
-  @Column({ type: 'array' })
-  stats: string[];
+  watermark: string
 }
