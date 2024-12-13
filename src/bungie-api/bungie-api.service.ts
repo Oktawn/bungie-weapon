@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import axios from 'axios';
 import { WeaponEntity } from 'src/entity/weapons.entity';
 import { Repository } from 'typeorm';
 
@@ -17,8 +18,7 @@ export class BungieApiService {
       if (!hasWeapon) {
         throw new BadRequestException('Weapon not found');
       }
-      const id = hasWeapon.id;      
-      console.log(hasWeapon.icon)
+      const id = hasWeapon.id;
       const res = await this.httpService.axiosRef.get(`/Destiny2/Manifest/DestinyInventoryItemDefinition/${id}`);
       if (res.status !== 200) {
         throw new BadRequestException('Weapon not found');
