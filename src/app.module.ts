@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { BungieApiModule } from './bungie-api/bungie-api.module';
 import { config } from 'dotenv';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { WeaponsService } from './weapons/weapons.service';
 config();
 @Module({
   imports: [
@@ -18,6 +19,6 @@ config();
     })
     , BungieApiModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, WeaponsService, ],
 })
 export class AppModule { }
