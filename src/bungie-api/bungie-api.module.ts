@@ -6,6 +6,7 @@ import { config } from 'dotenv';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WeaponEntity } from 'src/entity/weapons.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { WeaponsService } from 'src/weapons/weapons.service';
 config();
 @Module({
   imports: [
@@ -29,6 +30,6 @@ config();
     }])
   ],
   controllers: [BungieApiController],
-  providers: [BungieApiService],
+  providers: [BungieApiService,WeaponsService],
 })
 export class BungieApiModule { }
