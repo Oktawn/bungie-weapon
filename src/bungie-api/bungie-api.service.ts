@@ -18,7 +18,7 @@ export class BungieApiService {
     try {
       const hasWeapon = await this.weaponRepository.findOne({ where: { name: name } });
       if (!hasWeapon) {
-        return {message: 'Weapon not found'}
+        return { message: 'Weapon not found' }
       }
       const id = hasWeapon.id;
       const res = await this.httpService.axiosRef.get(`/Destiny2/Manifest/DestinyInventoryItemDefinition/${id}`);
@@ -30,6 +30,35 @@ export class BungieApiService {
       throw new BadRequestException(error.message);
     }
 
+  }
+
+  async getNameWeapons(name: string) {
+    try {
+      const getWeaponsByName = await this.weaponRepository.find({ where: { name: name } });
+      if (getWeaponsByName.length === 0) {
+        return { message: 'Weapons not found' }
+      }
+
+      return getWeaponsByName;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getWeaponById(id: string) {
+    try {
+      const hasWeapon = await this.weaponRepository.findOne({ where: { id: id } });
+      if (!hasWeapon) {
+        return { message: 'Weapon not found' }
+      }
+      const res = await this.httpService.axiosRef.get(`/Destiny2/Manifest/DestinyInventoryItemDefinition/${id}`);
+      if (res.status !== 200) {
+        throw new BadRequestException('Weapon not found');
+      }
+      return this.weaponsService.getPrettyInfo(hasWeapon, res.data.Response);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
 }

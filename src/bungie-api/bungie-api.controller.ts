@@ -19,4 +19,19 @@ export class BungieApiController {
     return this.bungieApiService.getWeapon(name);
   }
 
+  @Get('nameWeapons')
+  async getWeaponsByName(@Query('name') name: string) {
+    return this.client.send('get_name_weapons', name);
+  }
+
+  @MessagePattern('get_name_weapons')
+  async getNameWeapons(name: string) {
+    return this.bungieApiService.getNameWeapons(name);
+  }
+
+  @Get('weaponById')
+  async getWeaponById(@Query('id') id: string) {
+    return this.client.send('get_weapon_by_id', id);
+  }
+
 }
