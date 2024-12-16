@@ -13,7 +13,7 @@ services:
     ports:
       - '${DB_EXTERN}:${DB_PORT}'
 
-  rabbitmq:
+  api_rbmq:
     image: rabbitmq:3-management
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
@@ -23,6 +23,18 @@ services:
     ports:
       - '${RABBITMQ_PORT}:${RABBITMQ_PORT}'
       - '${RABBITMQ_MANAGEMENT_PORT}:${RABBITMQ_MANAGEMENT_PORT}'
+
+  api:
+    build: .
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - '${PORT}:${PORT}'
+    depends_on:
+      - api_db
+      - api_rbmq
+
 
 volumes:
   postgres_data:

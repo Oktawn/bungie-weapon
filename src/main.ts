@@ -19,7 +19,7 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
-      urls: [`${process.env.RABBITMQ_LOCAL_URL}`],
+      urls: [`${process.env.RABBITMQ_URL}`],
       queue: 'bungie_queue',
       queueOptions: {
         durable: false,
