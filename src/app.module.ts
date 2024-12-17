@@ -10,15 +10,15 @@ config();
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST /* process.env.DB_LOCALHOST */,
-      port: Number(process.env.DB_PORT) /* Number(process.env.DB_EXTERN) */,
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    })
-    , BungieApiModule],
+    }),
+    BungieApiModule],
   controllers: [AppController],
-  providers: [AppService, WeaponsService, ],
+  providers: [AppService, WeaponsService],
 })
 export class AppModule { }

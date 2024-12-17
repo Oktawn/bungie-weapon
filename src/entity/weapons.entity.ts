@@ -1,5 +1,9 @@
+import { ApiSchema } from "@nestjs/swagger";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
+@ApiSchema({
+  name: 'WeaponEntity',
+})
 @Entity('weapons')
 export class WeaponEntity {
 

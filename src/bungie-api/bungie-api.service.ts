@@ -1,9 +1,9 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WeaponEntity } from 'src/entity/weapons.entity';
 import { WeaponsService } from 'src/weapons/weapons.service';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class BungieApiService {
@@ -18,25 +18,25 @@ export class BungieApiService {
     try {
       const hasWeapon = await this.weaponRepository.findOne({ where: { name: name } });
       if (!hasWeapon) {
-        return { message: 'Weapon not found' }
+        throw new BadRequestException('Weapon not found');
       }
       const id = hasWeapon.id;
       const res = await this.httpService.axiosRef.get(`/Destiny2/Manifest/DestinyInventoryItemDefinition/${id}`);
       if (res.status !== 200) {
-        throw new BadRequestException('Weapon not found');
+        throw new InternalServerErrorException('Server error');
       }
       return this.weaponsService.getPrettyInfo(hasWeapon, res.data.Response);
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new InternalServerErrorException(error.message);
     }
 
   }
 
   async getNameWeapons(name: string) {
     try {
-      const getWeaponsByName = await this.weaponRepository.find({ where: { name: name } });
+      const getWeaponsByName = await this.weaponRepository.find({ where: { name: Like(`%${name}%`) } });
       if (getWeaponsByName.length === 0) {
-        return { message: 'Weapons not found' }
+        throw new BadRequestException('Weapons not found');
       }
 
       return getWeaponsByName;
@@ -49,11 +49,11 @@ export class BungieApiService {
     try {
       const hasWeapon = await this.weaponRepository.findOne({ where: { id: id } });
       if (!hasWeapon) {
-        return { message: 'Weapon not found' }
+        throw new BadRequestException('Weapon not found');
       }
       const res = await this.httpService.axiosRef.get(`/Destiny2/Manifest/DestinyInventoryItemDefinition/${id}`);
       if (res.status !== 200) {
-        throw new BadRequestException('Weapon not found');
+        throw new InternalServerErrorException('Server error');
       }
       return this.weaponsService.getPrettyInfo(hasWeapon, res.data.Response);
     } catch (error) {

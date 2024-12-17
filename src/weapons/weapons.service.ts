@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { NameWeaponDto, WeaponBowDto, WeaponEnumTypes, WeaponFuseDto, WeaponGrenadeDto, WeaponMostDto } from './weapons.dto';
+import { NameWeaponDto, WeaponDto } from './weapons.dto';
 import { config } from 'dotenv';
 
 config();
@@ -7,8 +7,7 @@ config();
 export class WeaponsService {
 
   getPrettyInfo(name: NameWeaponDto, rawData: any) {
-    const typeWeapon = rawData.itemSubType;
-    let data: WeaponMostDto = {
+    let data: WeaponDto = {
       id: name.id,
       name: name.name,
       icon: process.env.BNG_URL + name.icon,
@@ -24,6 +23,11 @@ export class WeaponsService {
       RPM: rawData.stats.stats['4284893193'] ? rawData.stats.stats['4284893193'].value : undefined,
       Magazine: rawData.stats.stats['3871231066'] ? rawData.stats.stats['3871231066'].value : undefined,
       'Recoil direction': rawData.stats.stats['2715839340'] ? rawData.stats.stats['2715839340'].value : undefined,
+      'Charge time': rawData.stats.stats['2961396640'] ? rawData.stats.stats['2961396640'].value : undefined,
+      "Blast radius": rawData.stats.stats['3614673599'] ? rawData.stats.stats['3614673599'].value : undefined,
+      Velocity: rawData.stats.stats['2523465841'] ? rawData.stats.stats['2523465841'].value : undefined,
+      "Draw time": rawData.stats.stats['447667954'] ? rawData.stats.stats['447667954'].value : undefined,
+      Accuracy: rawData.stats.stats['1591432999'] ? rawData.stats.stats['1591432999'].value : undefined,
       'Range hip-fire': 0,
       'Range ADS': 0,
       'Damage body': 0,
@@ -33,53 +37,8 @@ export class WeaponsService {
       if (data[key] === undefined)
         delete data[key];
     }
-    switch (typeWeapon) {
-      case WeaponEnumTypes.AutoRifle:
-      case WeaponEnumTypes.Shotgun:
-      case WeaponEnumTypes.Machinegun:
-      case WeaponEnumTypes.HandCannon:
-      case WeaponEnumTypes.SniperRifle:
-      case WeaponEnumTypes.PulseRifle:
-      case WeaponEnumTypes.ScoutRifle:
-      case WeaponEnumTypes.Sidearm:
-      case WeaponEnumTypes.SubmachineGun:
-      case WeaponEnumTypes.TraceRifle:
-        {
-          return data;
-        }
-      case WeaponEnumTypes.FusionRifle:
-      case WeaponEnumTypes.FusionRifleLine:
-        {
-
-          let fuseData: WeaponFuseDto = {
-            ...data,
-            "Charge time": rawData.stats.stats['2961396640'].value
-          }
-
-          return fuseData;
-        }
-      case WeaponEnumTypes.GrenadeLauncher:
-      case WeaponEnumTypes.RocketLauncher:
-        {
-          let grenadeData: WeaponGrenadeDto = {
-            ...data,
-            "Blast radius": rawData.stats.stats['3614673599'].value,
-            Velocity: rawData.stats.stats['2523465841'].value,
-
-          }
-          return grenadeData;
-        }
-      case WeaponEnumTypes.Bow:
-        {
-          let bowData: WeaponBowDto = {
-            ...data,
-            "Draw time": rawData.stats.stats['447667954'].value,
-            "Charge time": rawData.stats.stats['2961396640'].value,
-            Accuracy: rawData.stats.stats['1591432999'].value,
-          }
-          return bowData;
-        }
-    }
+    return data;
   }
-
 }
+
+
