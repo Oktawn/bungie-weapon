@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - '${DB_EXTERN}:${DB_PORT}'
+      - "${DB_EXTERN}:${DB_PORT}"
 
   api_rbmq:
     image: rabbitmq:3-management
@@ -21,20 +21,21 @@ services:
       - .env
     restart: always
     ports:
-      - '${RABBITMQ_PORT}:${RABBITMQ_PORT}'
-      - '${RABBITMQ_MANAGEMENT_PORT}:${RABBITMQ_MANAGEMENT_PORT}'
+      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"
+      - "${RABBITMQ_MANAGEMENT_PORT}:${RABBITMQ_MANAGEMENT_PORT}"
 
   api:
-    build: .
+    build:
+      context: ./api
+      dockerfile: Dockerfile
     env_file:
       - .env
     restart: always
     ports:
-      - '${PORT}:${PORT}'
+      - "${PORT}:${PORT}"
     depends_on:
       - api_db
       - api_rbmq
-
 
 volumes:
   postgres_data:

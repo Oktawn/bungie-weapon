@@ -32,6 +32,15 @@ export class BungieApiService {
 
   }
 
+  async getAllWeapons() {
+    try {
+      const res = await this.weaponRepository.find();
+      return res;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
   async getNameWeapons(name: string) {
     try {
       const getWeaponsByName = await this.weaponRepository.find({ where: { name: Like(`%${name}%`) } });

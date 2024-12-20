@@ -22,6 +22,17 @@ export class BungieApiController {
     return this.client.send('get_weapon', name);
   }
 
+
+  @Get('allWeapons')
+  @ApiOperation({ summary: 'Get an array of all weapons' })
+  @ApiConsumes('application/json')
+  @ApiResponse({ status: HttpStatus.OK, type: [NameWeaponDto] })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Weapons not found' })
+  async getAllWeapons() {
+    return this.client.send('get_all_weapons',{});
+  }
+
+
   @Get('weaponsArrayByName')
   @ApiQuery({ name: 'name', required: true })
   @ApiOperation({ summary: 'Get an array of id`s weapon by name' })
@@ -45,6 +56,11 @@ export class BungieApiController {
   @MessagePattern('get_weapon')
   async getWeaponFromService(name: string) {
     return this.bungieApiService.getWeapon(name);
+  }
+
+  @MessagePattern('get_all_weapons')
+  async getAllWeaponsFromService() {
+    return this.bungieApiService.getAllWeapons();
   }
 
   @MessagePattern('get_weapons_by_name')
