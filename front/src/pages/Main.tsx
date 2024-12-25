@@ -13,10 +13,9 @@ function Main() {
 
   }, [listWeapons])
   return (
-    <>
-      <div>destiny 2 guns</div>
+    <div>
       <SearchBar />
-    </>
+    </div>
   )
 }
 

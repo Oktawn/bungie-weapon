@@ -1,14 +1,14 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { ShortWeapon, useListStore } from "../State/useListStore";
-import { Link } from "react-router-dom";
+import CardsList from "../CardsList/CardsList";
+import { Input, InputGroup } from "rsuite";
 
 function SearchBar() {
   const getWeapons = useListStore(state => state.getWeapons);
   const [delay, setDelay] = useState(0);
   const [searchRes, setSearchRes] = useState<ShortWeapon[]>([]);
 
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const handleSearch = (value: string) => {
 
     if (delay)
       clearTimeout(delay);
@@ -16,34 +16,19 @@ function SearchBar() {
     setDelay(setTimeout(() => {
       const ans = getWeapons(value);
       if (value !== '') {
-        console.log(value);
         setSearchRes(ans);
       }
       else
         setSearchRes([]);
-    }, 300))
+    }, 350))
   }
   return (
-    <div>
-      <input type="text" placeholder="Search" onChange={handleSearch} />
-      {
-        searchRes.length > 0 &&
-        <ul>
-          {
-            searchRes.map(item => (
-              <Link to={`/weapon/${item.id}`} key={item.id} >
-                <li key={item.id} className="result-item">
-                  <div className="icon-container">
-                    <img src={"https://www.bungie.net" + item.icon} className="icon" />
-                    <img src={"https://www.bungie.net" + item.watermark} className="watermark" />
-                    {item.name}
-                  </div>
-                </li>
-              </Link>
-            ))
-          }
-        </ul>
-      }
+    <div >
+      <InputGroup>
+        <Input type="text" size="lg" placeholder="Search" onChange={(v) => handleSearch(v)} />
+        <InputGroup.Addon>🔍</InputGroup.Addon>
+      </InputGroup>
+      <CardsList listWeapon={searchRes} />
     </div>
   )
 }

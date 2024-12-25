@@ -32,7 +32,6 @@ export const useListStore = create<ListStore>()(persist((set, get) => ({
   setList: async () => {
     try {
       const res = await baseURL.get('allWeapons').json<ShortWeapon[]>();
-      console.log(res)
       set({ listWeapons: res })
     } catch (error) {
       console.log(error)
@@ -42,7 +41,7 @@ export const useListStore = create<ListStore>()(persist((set, get) => ({
 
   getWeapons: (filter) => {
     return get().listWeapons.filter((item) =>
-      item.name.toLowerCase().startsWith(filter.toLowerCase()))
+      item.name.toLowerCase().includes(filter.toLowerCase()))
   },
   getWeapon: async (id) => {
     try {

@@ -1,10 +1,11 @@
+import { Container } from 'rsuite'
 import Router from './Router'
 
 function App() {
   return (
-    <div>
+    <Container className='app'>
       <Router />
-    </div>
+    </Container>
   )
 }
 
