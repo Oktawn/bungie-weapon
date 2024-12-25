@@ -3,7 +3,7 @@ import Router from './Router'
 
 function App() {
   return (
-    <Container className='app'>
+    <Container>
       <Router />
     </Container>
   )
